@@ -1,0 +1,4 @@
+[appservers]
+%{ for index, ip in private_ip ~}
+${ip} ansible_host=${private_ip[index]} private_ip=${private_ip[index]} ansible_ssh_user=jenkins
+%{ endfor ~}

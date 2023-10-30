@@ -1,0 +1,23 @@
+---
+  - name: "Download artifact from bucket to KCFN jumphost"
+    become: true
+    become_user: prashant
+    #local_action:
+    shell:
+      gsutil cp -r  gs://keng01-cloudops-bucket/bli-package /tmp/
+    register: result
+    until: result.rc == 0
+    retries: 10
+    delay: 10
+  - name: "Provide 775 permission to bli-package folder to excute"
+    become: true
+    become_user: prashant
+    file: dest=/tmp/bli-package/ owner=prashant group=prashant mode=777 recurse=yes
+  - name: "Excute BLI script"
+    become: true
+    become_user: prashant
+    shell: |
+      sh -x /tmp/bli-package/linux/scripts/create-gfi-image.sh {{ ARG1 }} {{ ARG2 }}
+    register: result
+  - debug:
+      var: result.stdout

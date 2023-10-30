@@ -1,0 +1,3 @@
+---
+#tasks to be performed for BLI automation
+- include_tasks: ConfigureBli.yml
